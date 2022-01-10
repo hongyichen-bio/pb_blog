@@ -1,0 +1,11 @@
+@import './fonts/Nautigal.css';
+body{
+    font-family: The Nautigal, cursive;
+}
+.card{
+    font-size: 24px;
+    color: red;
+    .title{
+        color: blue;
+    }
+}
