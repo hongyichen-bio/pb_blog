@@ -30,6 +30,6 @@ const mix = require('laravel-mix');
 // ],'public/css/abc.min.css')
 // .copyDirectory('resources/imgs','public/imgs')
 
-
 mix.js('resources/js/app.js', 'public/js')
 .sass('resources/css/app.scss', 'public/css')
+.version()

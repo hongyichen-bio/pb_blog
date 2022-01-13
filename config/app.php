@@ -56,6 +56,9 @@ return [
 
     'asset_url' => env('ASSET_URL', null),
 
+    // mix('url') 補上domain Name
+    'mix_url' => env('MIX_ASSET_URL', null),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
