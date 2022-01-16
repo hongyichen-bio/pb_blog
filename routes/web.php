@@ -20,8 +20,8 @@ Route::get('/', function () {
     return view('home');
 });
 
+Route::get('/pb', [PageController::class, 'pb']);
 
-Route::get('/pb',  [PageController::class, 'pb']);
 
 Route::resource('products', ProductController::class);
 Route::resource('orders', OrderController::class);

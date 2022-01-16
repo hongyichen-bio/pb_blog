@@ -1,8 +1,11 @@
 @extends('layouts.app')
 
-
 @section('content')
-    <h1>ProgressBar Pb {{$version}}</h1>
-    <h2>level={{$level}}</h2>
+
+<h1>Progress bar {{ $ver }} level {{ $level }}</h1>
+
 @endsection
 
+@section('inline_js')
+    @parent
+@endsection

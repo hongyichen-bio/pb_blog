@@ -1,16 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Document</title>
-    @include('layouts.meta')
-    <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
-</head>
-<body>
-    @include('layouts.nav')
-    <div class="container">
+<html>
+    <head>
+        <title>進度條 Laravel Controller 章節</title>
+        @include('layouts.meta')
+        @include('layouts.css')
+    </head>
+    <body>
+        @include('layouts.nav')
         @yield('content')
-    </div>
-    @include('layouts.footer')
-    <!-- <script src="{{ mix('/js/app.js') }}"></script> -->
-</body>
+        @include('layouts.footer')
+        @include('layouts.js')
+
+        @section('inline_js')
+        @show
+    </body>
 </html>

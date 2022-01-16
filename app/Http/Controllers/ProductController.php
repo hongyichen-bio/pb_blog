@@ -8,10 +8,10 @@ class ProductController extends Controller
 {
     function index()
     {
-        $items = $this->getProducts();
+        $products = $this->getProducts();
 
-        return view('product.index' ,[
-            "products" => $items
+        return view('product.index', [
+            "products" => $products
         ]);
     }
 
@@ -20,75 +20,89 @@ class ProductController extends Controller
         return view('product.create');
     }
 
-    
     public function store(Request $request)
     {
         return redirect()->route('products.index');
     }
 
-    public function edit($id)
+    function show($id, Request $request)
     {
+        // order => 訂單
+        // product => 商品
+        // prefix => 前綴
+
+        // $id = $request->input('id');
+
+
         $products = $this->getProducts();
-        $product = $products[$id];
-        return view('product.edit' , [
-            'product' => $product,
+
+        $index = $id - 1;
+        if ( $index < 0 || $index >= count($products)){
+            abort(404);
+        }
+
+        $product = $products[$index];
+
+        return view('product.show', [
+            "product" => $product
         ]);
     }
 
-    
-    public function update(Request $request, $id)
+    public function edit($id)
     {
-        
         $products = $this->getProducts();
 
-        $product = $products[$id];
+        $index = $id - 1;
+        if ( $index < 0 || $index >= count($products)){
+            abort(404);
+        }
 
-        echo '<pre>'; print_r($product); 
+        $product = $products[$index];
+
+        return view('product.edit', [
+            "product" => $product
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        //
+        // $method = $request->method();
+        // echo "update $method";
+
+        $products = $this->getProducts();
+
+        $index = $id - 1;
+        if ( $index < 0 || $index >= count($products)){
+            abort(404);
+        }
+
+        $product = $products[$index];
+
         return redirect()->route('products.edit', ['product' => $product['id']]);
 
     }
 
-    function show($id, Request $request)
-    {
-
-        $items = $this->getProducts();
-
-        $item = $items[$id];
-
-
-        return view('product.show', [
-            'item' => $item
-        ]);
-    }
     public function destroy($id)
     {
-        //
-        echo 'destroy';
-
         return redirect()->route('products.index');
     }
 
     private function getProducts()
     {
-
-        $products = 
-        [
+        return [
             [
-                'id'  => 0,
-                'img' => asset('images/1.jpg'),
-                'price' => 40,
-                'name' => '第一個商品'
+                "id" => 1,
+                "name" => "Orange",
+                "price" => 30,
+                "imageUrl" => asset('images/orange01.jpg')
             ],
             [
-                'id'  => 1,
-                'img' => asset('images/2.jpg'),
-                'price' => 555,
-                'name' => '第二個商品'
-            ],
+                "id" => 2,
+                "name" => "Apple",
+                "price" => 20,
+                "imageUrl" => asset('images/apple01.jpg')
+            ]
         ];
-
-
-        return $products;
     }
-
 }
