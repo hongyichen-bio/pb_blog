@@ -35,6 +35,28 @@ class CartController extends Controller
 
     }
 
+    public function deleteCookie(Request $request)
+    {
+        if($request->has('id'))
+        {
+            $productId = $request->input('id');
+            $cart = $this->getCartFromCookie();
+            if(isset($cart[$productId]))
+            {
+                unset($cart[$productId]);
+                $cartToJson = empty($cart) ? "{}" : json_encode($cart, true);
+            }
+            Cookie::queue(
+                Cookie::make('cart', $cartToJson , 60 * 24 * 7, null, null, false, false)
+            );
+            return response('success');
+
+        }
+
+
+        return response('fail');
+    }
+
     private function getCartFromCookie()
     {
         $cart = Cookie::get('cart');
@@ -99,6 +121,6 @@ class CartController extends Controller
         ];
     }
 
-
+    
 
 }

@@ -23,6 +23,32 @@ function updateProductToCart(productId, newQuantity){
     saveCart(cart);
 }
 
+function initCartDeleteButton(actionUrl){
+    let cartDeleteBtn = document.querySelectorAll('.cartDeleteBtn');
+    let csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+    cartDeleteBtn.forEach(element => {
+        element.addEventListener('click', function(){
+            let id = this.getAttribute('data-id');
+            var formData = new FormData();
+            formData.append('id', id);
+            formData.append('_method', 'DELETE');
+            formData.append('_token', csrfToken);
+            let request = new XMLHttpRequest();
+            request.open('POST', actionUrl);
+            request.onreadystatechange = function(){
+                if(request.readyState === XMLHttpRequest.DONE
+                    && request.status === 200
+                    && request.responseText === 'success') {
+                        window.location.reload();
+                    }
+                
+            }
+
+            request.send(formData);
+        })
+    });
+}
+
 function saveCart(cart){
     Cookies.set('cart', JSON.stringify(cart));
 }
@@ -47,4 +73,4 @@ function initAddToCart () {
     }
 }
 
-export {initAddToCart}
+export {initAddToCart, initCartDeleteButton}

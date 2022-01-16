@@ -109,6 +109,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _cart__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./cart */ "./resources/js/cart.js");
 
 window.initAddToCart = _cart__WEBPACK_IMPORTED_MODULE_0__["initAddToCart"];
+window.initCartDeleteButton = _cart__WEBPACK_IMPORTED_MODULE_0__["initCartDeleteButton"];
 
 /***/ }),
 
@@ -116,12 +117,13 @@ window.initAddToCart = _cart__WEBPACK_IMPORTED_MODULE_0__["initAddToCart"];
 /*!******************************!*\
   !*** ./resources/js/cart.js ***!
   \******************************/
-/*! exports provided: initAddToCart */
+/*! exports provided: initAddToCart, initCartDeleteButton */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initAddToCart", function() { return initAddToCart; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initCartDeleteButton", function() { return initCartDeleteButton; });
 function initCart() {
   return Cookies.get('cart');
 }
@@ -143,6 +145,30 @@ function updateProductToCart(productId, newQuantity) {
   var cart = getCart();
   cart[productId] = newQuantity;
   saveCart(cart);
+}
+
+function initCartDeleteButton(actionUrl) {
+  var cartDeleteBtn = document.querySelectorAll('.cartDeleteBtn');
+  var csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+  cartDeleteBtn.forEach(function (element) {
+    element.addEventListener('click', function () {
+      var id = this.getAttribute('data-id');
+      var formData = new FormData();
+      formData.append('id', id);
+      formData.append('_method', 'DELETE');
+      formData.append('_token', csrfToken);
+      var request = new XMLHttpRequest();
+      request.open('POST', actionUrl);
+
+      request.onreadystatechange = function () {
+        if (request.readyState === XMLHttpRequest.DONE && request.status === 200 && request.responseText === 'success') {
+          window.location.reload();
+        }
+      };
+
+      request.send(formData);
+    });
+  });
 }
 
 function saveCart(cart) {
