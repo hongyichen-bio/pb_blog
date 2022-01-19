@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+
+    public function __construct()
+    {   
+    }
+
     function index()
     {
         $products = $this->getProducts();
@@ -22,6 +27,14 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'product_name' => 'required|string|max:6',
+            'product_price' => 'required|integer|max:9999|min:0',
+            'product_image' => [
+                'required', 'string', 'regex:/^images\/\w+\.(png|jpe?g)$/i'
+            ],
+        ]);
+
         return redirect()->route('products.index');
     }
 
