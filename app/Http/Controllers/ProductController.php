@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -22,18 +23,30 @@ class ProductController extends Controller
 
     public function create()
     {
+
         return view('product.create');
     }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'product_name' => 'required|string|max:6',
-            'product_price' => 'required|integer|max:9999|min:0',
-            'product_image' => [
-                'required', 'string', 'regex:/^images\/\w+\.(png|jpe?g)$/i'
-            ],
-        ]);
+        
+        // $path = $request->file('product_image')->store('local');
+
+        $path = $request->file('product_image')->storeAs(
+            'products',
+            '123444',
+            'public'
+        );
+
+        $localPath = public_path('storage') . $path; // 刪掉檔案會用到的路徑
+        $fullURL = asset(Storage::disk('public')->url($path));
+        $url = Storage::url($path); // client端
+        // 先軟連結  php .\artisan storage:link
+
+        echo '<pre>'; print_r($localPath); //C:\Users\milk3\Desktop\laravel\pb_controller\public\storageproducts/123444
+        echo '<pre>'; print_r($fullURL); //http://localhost:8000/storage/products/123444
+        echo '<pre>'; print_r($url); ///storage/products/123444
+        die();
 
         return redirect()->route('products.index');
     }
