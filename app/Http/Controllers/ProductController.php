@@ -43,10 +43,10 @@ class ProductController extends Controller
         $url = Storage::url($path); // client端
         // 先軟連結  php .\artisan storage:link
 
-        echo '<pre>'; print_r($localPath); //C:\Users\milk3\Desktop\laravel\pb_controller\public\storageproducts/123444
-        echo '<pre>'; print_r($fullURL); //http://localhost:8000/storage/products/123444
-        echo '<pre>'; print_r($url); ///storage/products/123444
-        die();
+        // echo '<pre>'; print_r($localPath); //C:\Users\milk3\Desktop\laravel\pb_controller\public\storageproducts/123444
+        // echo '<pre>'; print_r($fullURL); //http://localhost:8000/storage/products/123444
+        // echo '<pre>'; print_r($url); ///storage/products/123444
+        // die();
 
         return redirect()->route('products.index');
     }
