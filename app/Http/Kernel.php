@@ -37,7 +37,6 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            
         ],
 
         'api' => [
@@ -63,6 +62,8 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'check.token' => \App\Http\Middleware\CheckToken::class
+        'check.token' => \App\Http\Middleware\CheckToken::class,
+        'pbweb.token' => \App\Http\Middleware\IsPBWebToken::class,
+        'pbweb.downloadfile' => \App\Http\Middleware\CanDownloadFile::class,
     ];
 }

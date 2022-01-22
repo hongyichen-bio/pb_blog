@@ -4,8 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use App\Rules\DownloadTokenRole;
 
-class CheckToken
+class IsPBWebToken
 {
     /**
      * Handle an incoming request.
@@ -16,8 +18,14 @@ class CheckToken
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->token != "123456") {
-            return redirect('/');
+        $validator = Validator::make($request->all(), [
+            'token' => [
+                'required', 'string', new DownloadTokenRole],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('/')
+                ->withErrors($validator);
         }
 
         return $next($request);

@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
 <h1>{{ $product['name'] }}</h1>
 <img width="400" src="{{ $product['imageUrl'] }}">
 <div style="margin: 36px 0;">
@@ -15,7 +14,7 @@
     @parent
 
     <script>
-        let productId = "{{ $product['id'] }}"
+        var productId = "{{ $product['id'] }}"
         initAddToCart(productId)
     </script>
 @endsection

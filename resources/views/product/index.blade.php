@@ -21,7 +21,6 @@
             @method('delete')
             <button type="submit">delete</button>
         </form>
-    
     </div>
     <hr/>
 </div>

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,11 +18,16 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CartController;
 
-Route::get('/', function () {
-    return view('home');
-});
 
+Route::get('/', [PageController::class, 'home']);
 Route::get('/pb', [PageController::class, 'pb']);
+Route::get('/download/{id}', [PageController::class, 'download'])
+->where('id', '[0-9]+');
+
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('products', ProductController::class);
+});
 
 
 Route::resource('products', ProductController::class);
@@ -29,5 +35,6 @@ Route::resource('orders', OrderController::class);
 
 Route::patch('/cart/cookie', [CartController::class, 'updateCookie'])->name('cart.cookie.update');
 Route::delete('/cart/cookie', [CartController::class, 'deleteCookie'])->name('cart.cookie.delete');
-
 Route::resource('cart', CartController::class);
+
+

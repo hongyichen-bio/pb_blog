@@ -125,12 +125,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initAddToCart", function() { return initAddToCart; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initCartDeleteButton", function() { return initCartDeleteButton; });
 function initCart() {
-  return Cookies.get('cart');
+  return getCart();
 }
 
 function getCart() {
+  console.log(document.cookie);
   var cart = Cookies.get('cart');
-  return cart ? JSON.parse(cart) : {};
+  return !cart ? {} : JSON.parse(cart);
+}
+
+function saveCart(cart) {
+  Cookies.set('cart', JSON.stringify(cart));
 }
 
 function addProductToCart(productId, quantity) {
@@ -147,41 +152,13 @@ function updateProductToCart(productId, newQuantity) {
   saveCart(cart);
 }
 
-function initCartDeleteButton(actionUrl) {
-  var cartDeleteBtn = document.querySelectorAll('.cartDeleteBtn');
-  var csrfToken = document.querySelector('meta[name="csrf-token"]').content;
-  cartDeleteBtn.forEach(function (element) {
-    element.addEventListener('click', function () {
-      var id = this.getAttribute('data-id');
-      var formData = new FormData();
-      formData.append('id', id);
-      formData.append('_method', 'DELETE');
-      formData.append('_token', csrfToken);
-      var request = new XMLHttpRequest();
-      request.open('POST', actionUrl);
-
-      request.onreadystatechange = function () {
-        if (request.readyState === XMLHttpRequest.DONE && request.status === 200 && request.responseText === 'success') {
-          window.location.reload();
-        }
-      };
-
-      request.send(formData);
-    });
-  });
-}
-
-function saveCart(cart) {
-  Cookies.set('cart', JSON.stringify(cart));
-}
-
-function alertProductToCart(productId) {
+function alertProductQuantity(productId) {
   var cart = getCart();
-  var quantity = parseInt(cart[productId]);
+  var quantity = parseInt(cart[productId]) || 0;
   alert(quantity);
 }
 
-function initAddToCart() {
+function initAddToCart(productId) {
   var addToCartBtn = document.querySelector('#addToCart');
 
   if (addToCartBtn) {
@@ -190,8 +167,36 @@ function initAddToCart() {
 
       if (quantityInput) {
         addProductToCart(productId, quantityInput.value);
-        alertProductToCart(productId);
+        alertProductQuantity(productId);
       }
+    });
+  }
+}
+
+function initCartDeleteButton(actionUrl) {
+  var cartDeleteBtns = document.querySelectorAll('.cartDeleteBtn');
+
+  for (var index = 0; index < cartDeleteBtns.length; index++) {
+    var cartDeleteBtn = cartDeleteBtns[index];
+    cartDeleteBtn.addEventListener('click', function (e) {
+      var btn = e.target;
+      var dataId = btn.getAttribute('data-id');
+      var formData = new FormData();
+      formData.append("_method", 'DELETE');
+      var csrfTokenMeta = document.querySelector('meta[name="csrf-token"]');
+      var csrfToken = csrfTokenMeta.content;
+      formData.append("_token", csrfToken);
+      formData.append("id", dataId);
+      var request = new XMLHttpRequest();
+      request.open("POST", actionUrl);
+
+      request.onreadystatechange = function () {
+        if (request.readyState === XMLHttpRequest.DONE && request.status === 200 && request.responseText === "success") {
+          window.location.reload();
+        }
+      };
+
+      request.send(formData);
     });
   }
 }
@@ -207,8 +212,8 @@ function initAddToCart() {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\milk3\Desktop\laravel\pb_controller\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\milk3\Desktop\laravel\pb_controller\resources\css\app.scss */"./resources/css/app.scss");
+__webpack_require__(/*! C:\Users\cty22\Desktop\Coureses\Laravel\projects\04. controller_and_view\pb_controller\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\cty22\Desktop\Coureses\Laravel\projects\04. controller_and_view\pb_controller\resources\css\app.scss */"./resources/css/app.scss");
 
 
 /***/ })
