@@ -4,20 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\DB;
 class ProductController extends Controller
 {
-    private $products;
-
-    public function __construct()
-    {
-        $this->products = $this->getProducts();
-    }
-
     public function index(Request $request)
     {
+        $products = $this->getProducts();
+
         return view('product.index', [
-            "products" => $this->products,
+            'products' => $products,
         ]);
     }
 
@@ -29,45 +24,44 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $diskName = "product_images";
+        $file = $request->file('product_image');
+        $fileName = $file->hashName(); // 亂出生成一個檔名
+        $extension = $file->extension(); // 副檔名
 
-        $name = $request->file('product_image')->getClientOriginalName();
 
-        $path = $request->file('product_image')->storeAs(
-            'product_images',  //儲存路徑
-            $name,
+        $diskName = "public";
+
+        $path = $file->storeAs(
+            'products',  //儲存路徑
+            $fileName,
+            $diskName // disk name
         );
         
-        $localPath = public_path("storage/product_images/$path");
         $url = Storage::disk($diskName)->url($path);
         $fullURL = asset($url);
-        $storage_path = Storage::disk($diskName)->path($path);
+        
+        DB::table('products')->insert([
+            'title'     => $request->input('product_name'),
+            'price'     => $request->input('product_price'),
+            'filename'  => $url
+        ]);
+        
+        // $localPath = public_path("storage/product_images/$path");
+        // $url = Storage::disk($diskName)->url($path);
+        // $fullURL = asset($url);
+        // $storage_path = Storage::disk($diskName)->path($path);
         // storage_path("app/public/$path");
 
-        return redirect()->route('products.index')->withErrors([
-            $localPath,
-            $url,
-            $fullURL,
-            $storage_path
-        ]);
+        return redirect()->route('products.index');
     }
 
     public function show($id, Request $request)
     {
-        // order => 訂單
-        // product => 商品
-        // prefix => 前綴
+        $product = $this->getProducts($id);
 
-        // $id = $request->input('id');
-
-        $products = $this->getProducts();
-
-        $index = $id - 1;
-        if ($index < 0 || $index >= count($products)) {
+        if (!$product) {
             abort(404);
         }
-
-        $product = $products[$index];
 
         return view('product.show', [
             "product" => $product,
@@ -76,14 +70,11 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-        $products = $this->getProducts();
+        $product = $this->getProducts($id);
 
-        $index = $id - 1;
-        if ($index < 0 || $index >= count($products)) {
+        if (!$product) {
             abort(404);
         }
-
-        $product = $products[$index];
 
         return view('product.edit', [
             "product" => $product,
@@ -92,43 +83,49 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        //
-        // $method = $request->method();
-        // echo "update $method";
+        
+        $product = $this->getProducts($id);
 
-        $products = $this->getProducts();
-
-        $index = $id - 1;
-        if ($index < 0 || $index >= count($products)) {
+        if (!$product) {
             abort(404);
         }
 
-        $product = $products[$index];
+        $validatedData = $request->validate([
+            'product_name' => ['required', 'string', 'max:255'],
+            'product_price' => ['required', 'integer', 'min:0'],
+        ]);
 
-        return redirect()->route('products.edit', ['product' => $product['id']]);
+        DB::table('products')->where('id', $id)->update([
+            'title'     => $request->input('product_name'),
+            'price'     => $request->input('product_price'),
+            // 'filename'  => $url
+        ]);
+
+
+        return redirect()->route('products.edit', ['product' => $id]);
 
     }
 
     public function destroy($id)
     {
+        $product = $this->getProducts($id);
+        if(!$product)
+        {
+            return redirect()->route('products.index');
+        }
+
+        DB::table('products')->where('id',$id)->delete();
+        
         return redirect()->route('products.index');
     }
 
-    private function getProducts()
+    private function getProducts($id = false)
     {
-        return [
-            [
-                "id" => 1,
-                "name" => "Orange",
-                "price" => 30,
-                "imageUrl" => asset('images/orange01.jpg'),
-            ],
-            [
-                "id" => 2,
-                "name" => "Apple",
-                "price" => 20,
-                "imageUrl" => asset('images/apple01.jpg'),
-            ],
-        ];
+        if($id)
+        {
+            return DB::table('products')->where('id', $id)->first();
+        }
+
+        return DB::table('products')->get();
     }
 }

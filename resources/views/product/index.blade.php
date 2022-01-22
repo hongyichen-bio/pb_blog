@@ -10,13 +10,13 @@
 @foreach ($products as $product)
 <div>
     <div>
-        <a href="{{ route('products.show', ['product' => $product['id'] ]) }}">
-            <img width="400" src="{{ $product['imageUrl'] }}">
+        <a href="{{ route('products.show', ['product' => $product->id ]) }}">
+            <img width="400" src="{{ $product->filename }}">
         </a>
     </div>
     <div>
-        <a href="{{ route('products.edit', ['product' => $product['id'] ]) }}">Edit</a>
-        <form method="post" action="{{ route('products.destroy', ['product' => $product['id']]) }}">
+        <a href="{{ route('products.edit', ['product' => $product->id ]) }}">Edit</a>
+        <form method="post" action="{{ route('products.destroy', ['product' => $product->id]) }}">
             @csrf
             @method('delete')
             <button type="submit">delete</button>
