@@ -93,13 +93,44 @@ class ProductController extends Controller
         $validatedData = $request->validate([
             'product_name' => ['required', 'string', 'max:255'],
             'product_price' => ['required', 'integer', 'min:0'],
+            'product_image' => ['nullable', 'image'],
         ]);
 
-        DB::table('products')->where('id', $id)->update([
+
+        // 原檔名
+        $path = $product->filename;
+
+        if($request->has('product_image')){
+
+            $file = $request->file('product_image');
+            $fileName = $file->hashName(); // 亂出生成一個檔名
+    
+            
+            $diskName = "public";
+            $disk = Storage::disk($diskName);
+    
+            //delete file
+            if($disk->exists($product->filename)){
+                $disk->delete($product->filename);
+            }
+    
+            //save file
+            $path = $file->storeAs(
+                'products',  //儲存路徑
+                $fileName,
+                $diskName // disk name
+            );
+            
+        }
+
+
+        $inserdata = [
             'title'     => $request->input('product_name'),
             'price'     => $request->input('product_price'),
-            // 'filename'  => $url
-        ]);
+            'filename'  => $path,
+        ];
+
+        DB::table('products')->where('id', $id)->update($inserdata);
 
 
         return redirect()->route('products.edit', ['product' => $id]);
