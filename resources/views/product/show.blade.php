@@ -2,7 +2,7 @@
 
 @section('content')
 <h1>{{ $product->title }}</h1>
-<img width="400" src="{{ $product->filename }}">
+<img width="400" src="<?php echo asset('').'Storage/'.$product->filename ?>">
 <div style="margin: 36px 0;">
     <p>Price: ${{ $product->price }}</p>
     <input type="number" name="quantity" min="1" value="1"/>

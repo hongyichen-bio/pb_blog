@@ -17,8 +17,11 @@
     <br />
     <div>
         <label>
-            Product image: <input type="file" name="product_image"/>
+            Product image: <input type="file" id="product_image" name="product_image" data-target="preview_product_image" />
         </label>
+        <div style="max-width: 300px;">
+            <img style="width: 100%;" id="preview_product_image" src="" alt="">
+        </div>
     </div>
     <br />
     <div>
@@ -38,4 +41,20 @@
 
 @section('inline_js')
     @parent
+    <script>
+        
+        document.querySelector('#product_image').addEventListener('change',function(e){
+            readURL(this);
+        })  
+
+        function readURL(input){
+            if(input.files && input.files[0]){
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.querySelector('#preview_product_image').setAttribute('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
 @endsection

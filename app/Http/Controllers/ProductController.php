@@ -36,14 +36,11 @@ class ProductController extends Controller
             $fileName,
             $diskName // disk name
         );
-        
-        $url = Storage::disk($diskName)->url($path);
-        $fullURL = asset($url);
-        
+                
         DB::table('products')->insert([
             'title'     => $request->input('product_name'),
             'price'     => $request->input('product_price'),
-            'filename'  => $url
+            'filename'  => $path
         ]);
         
         // $localPath = public_path("storage/product_images/$path");
