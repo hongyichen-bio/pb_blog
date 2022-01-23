@@ -15,12 +15,12 @@
         </label>
     </div>
     <br />
-    <div>
+    <div class="image_uploader">
         <label>
-            Product image: <input type="file" id="product_image" name="product_image" data-target="preview_product_image" />
+            Product image: <input type="file" id="product_image" name="product_image" />
         </label>
         <div style="max-width: 300px;">
-            <img style="width: 100%;" id="preview_product_image" src="" alt="">
+            <img style="width: 100%;" id="" src="https://www.lifewire.com/thmb/P856-0hi4lmA2xinYWyaEpRIckw=/1920x1326/filters:no_upscale():max_bytes(150000):strip_icc()/cloud-upload-a30f385a928e44e199a62210d578375a.jpg" alt="">
         </div>
     </div>
     <br />
@@ -42,19 +42,6 @@
 @section('inline_js')
     @parent
     <script>
-        
-        document.querySelector('#product_image').addEventListener('change',function(e){
-            readURL(this);
-        })  
-
-        function readURL(input){
-            if(input.files && input.files[0]){
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    document.querySelector('#preview_product_image').setAttribute('src', e.target.result);
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
+        imageUploader('image_uploader');
     </script>
 @endsection

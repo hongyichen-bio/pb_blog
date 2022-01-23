@@ -24,24 +24,40 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $file = $request->file('product_image');
-        $fileName = $file->hashName(); // 亂出生成一個檔名
-        $extension = $file->extension(); // 副檔名
+
+        $validatedData = $request->validate([
+            'product_name' => ['required', 'string', 'max:255'],
+            'product_price' => ['required', 'integer', 'min:0'],
+            'product_image' => ['nullable', 'image'],
+        ]);
 
 
-        $diskName = "public";
+        $path = '';
+        if($request->has('product_image'))
+        {
 
-        $path = $file->storeAs(
-            'products',  //儲存路徑
-            $fileName,
-            $diskName // disk name
-        );
-                
-        DB::table('products')->insert([
+            $file = $request->file('product_image');
+            $fileName = $file->hashName(); // 亂出生成一個檔名
+            $extension = $file->extension(); // 副檔名
+
+            $diskName = "public";
+            $disk = Storage::disk($diskName);
+    
+            $path = $file->storeAs(
+                'products',  //儲存路徑
+                $fileName,
+                $diskName // disk name
+            );
+        }
+
+        
+        $insertData = [
             'title'     => $request->input('product_name'),
             'price'     => $request->input('product_price'),
-            'filename'  => $path
-        ]);
+            'filename'  => $path,
+        ];
+                
+        DB::table('products')->insert($insertData);
         
         // $localPath = public_path("storage/product_images/$path");
         // $url = Storage::disk($diskName)->url($path);
@@ -93,7 +109,6 @@ class ProductController extends Controller
             'product_image' => ['nullable', 'image'],
         ]);
 
-
         // 原檔名
         $path = $product->filename;
 
@@ -121,16 +136,16 @@ class ProductController extends Controller
         }
 
 
-        $inserdata = [
+        $updateData = [
             'title'     => $request->input('product_name'),
             'price'     => $request->input('product_price'),
             'filename'  => $path,
         ];
 
-        DB::table('products')->where('id', $id)->update($inserdata);
+        DB::table('products')->where('id', $id)->update($updateData);
 
 
-        return redirect()->route('products.edit', ['product' => $id]);
+        return redirect()->route('products.index', ['product' => $id]);
 
     }
 
@@ -140,6 +155,15 @@ class ProductController extends Controller
         if(!$product)
         {
             return redirect()->route('products.index');
+        }
+
+
+        $diskName = "public";
+        $disk = Storage::disk($diskName);
+        
+        //delete file
+        if($disk->exists($product->filename)){
+            $disk->delete($product->filename);
         }
 
         DB::table('products')->where('id',$id)->delete();

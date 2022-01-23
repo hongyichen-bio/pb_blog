@@ -107,7 +107,10 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _cart__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./cart */ "./resources/js/cart.js");
+/* harmony import */ var _imageUploader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./imageUploader */ "./resources/js/imageUploader.js");
 
+
+window.imageUploader = _imageUploader__WEBPACK_IMPORTED_MODULE_1__["default"];
 window.initAddToCart = _cart__WEBPACK_IMPORTED_MODULE_0__["initAddToCart"];
 window.initCartDeleteButton = _cart__WEBPACK_IMPORTED_MODULE_0__["initCartDeleteButton"];
 
@@ -205,6 +208,65 @@ function initCartDeleteButton(actionUrl) {
 
 /***/ }),
 
+/***/ "./resources/js/imageUploader.js":
+/*!***************************************!*\
+  !*** ./resources/js/imageUploader.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+var imageUploader = function imageUploader(className, filenameUrl) {
+  var containers = document.querySelectorAll(".".concat(className));
+
+  var _iterator = _createForOfIteratorHelper(containers),
+      _step;
+
+  try {
+    var _loop = function _loop() {
+      var container = _step.value;
+      var input = container.querySelector('input[type=file]');
+      var img = document.querySelector('img');
+      input.addEventListener('change', function (e) {
+        readURL(e.target, img);
+      });
+    };
+
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      _loop();
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
+};
+
+function readURL(input, img) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+      img.setAttribute('src', e.target.result);
+    };
+
+    reader.readAsDataURL(input.files[0]);
+  } else {
+    img.setAttribute('src', 'https://www.lifewire.com/thmb/P856-0hi4lmA2xinYWyaEpRIckw=/1920x1326/filters:no_upscale():max_bytes(150000):strip_icc()/cloud-upload-a30f385a928e44e199a62210d578375a.jpg');
+  }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (imageUploader);
+
+/***/ }),
+
 /***/ 0:
 /*!************************************************************!*\
   !*** multi ./resources/js/app.js ./resources/css/app.scss ***!
@@ -212,8 +274,8 @@ function initCartDeleteButton(actionUrl) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\cty22\Desktop\Coureses\Laravel\projects\04. controller_and_view\pb_controller\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\cty22\Desktop\Coureses\Laravel\projects\04. controller_and_view\pb_controller\resources\css\app.scss */"./resources/css/app.scss");
+__webpack_require__(/*! C:\Users\milk3\Desktop\laravel\pb\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\milk3\Desktop\laravel\pb\resources\css\app.scss */"./resources/css/app.scss");
 
 
 /***/ })

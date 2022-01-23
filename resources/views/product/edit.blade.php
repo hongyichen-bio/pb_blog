@@ -16,10 +16,13 @@
         </label>
     </div>
     <br />
-    <div>
+    <div class="image_uploader">
         <label>
-            Product image: <input type="file" name="product_image"/>
+            Product image: <input type="file" id="product_image" name="product_image" />
         </label>
+        <div style="max-width: 300px;">
+            <img style="width: 100%;" id="" src="<?php echo asset('')."Storage/{$product->filename}" ?>" alt="">
+        </div>
     </div>
     <br />
     <div>
@@ -39,4 +42,7 @@
 
 @section('inline_js')
     @parent
+    <script>
+        imageUploader('image_uploader', '<?php echo asset('')."/Storage/{$product->filename}" ?>');
+    </script>
 @endsection
