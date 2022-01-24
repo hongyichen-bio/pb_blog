@@ -15,6 +15,16 @@
             Product price: <input type="number" min=0 name="product_price" value="{{ $product->price }}"/>
         </label>
     </div>
+    <div>
+        <label>
+            Product brand Name: <input type="text" min=0 name="brand_name" value="{{ $product->brand_name }}"/>
+        </label>
+    </div>
+    <div>
+        <label>
+            Product category Name: <input type="text" min=0 name="category_name" value="{{ $product->category_name }}"/>
+        </label>
+    </div>
     <br />
     <div class="image_uploader">
         <label>

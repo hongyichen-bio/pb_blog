@@ -5,11 +5,21 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use App\Models\Product;
 class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $products = $this->getProducts();
+        // $products = $this->getProducts();
+
+        $category_name = $request->input('category_name');
+
+        if(!empty($category_name)){
+            $products = Product::where('category_name', $category_name)->get();
+        }else{
+            $products = Product::all();
+        }
+
 
         return view('product.index', [
             'products' => $products,
@@ -50,27 +60,31 @@ class ProductController extends Controller
             );
         }
 
+        // ======== 方式一
+        // $insertData = [
+        //     'title'     => $request->input('product_name'),
+        //     'price'     => $request->input('product_price'),
+        //     'filename'  => $path,
+        // ];
+        // $result = Product::create($insertData);
+
         
-        $insertData = [
-            'title'     => $request->input('product_name'),
-            'price'     => $request->input('product_price'),
-            'filename'  => $path,
-        ];
-                
-        DB::table('products')->insert($insertData);
-        
-        // $localPath = public_path("storage/product_images/$path");
-        // $url = Storage::disk($diskName)->url($path);
-        // $fullURL = asset($url);
-        // $storage_path = Storage::disk($diskName)->path($path);
-        // storage_path("app/public/$path");
+        // ======== 方式二  (這個方式 不管fillable)
+        $product = new Product();
+        $product->title      = $request->input('product_name');
+        $product->price     = $request->input('product_price');
+        $product->filename  = $path;
+        $save = $product->save();
+
 
         return redirect()->route('products.index');
     }
 
     public function show($id, Request $request)
     {
-        $product = $this->getProducts($id);
+        // $product = Product::where('id', $id)->first();
+        // $product = Product::find($id); // 裡面放 primary key  若找不到會回NULL
+        $product = Product::findOrFail($id); // 裡面放 primary key  若找不到會進404
 
         if (!$product) {
             abort(404);
@@ -83,7 +97,7 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-        $product = $this->getProducts($id);
+        $product = Product::find($id);
 
         if (!$product) {
             abort(404);
@@ -97,7 +111,7 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         
-        $product = $this->getProducts($id);
+        $product = Product::find($id);
 
         if (!$product) {
             abort(404);
@@ -137,12 +151,17 @@ class ProductController extends Controller
 
 
         $updateData = [
-            'title'     => $request->input('product_name'),
-            'price'     => $request->input('product_price'),
-            'filename'  => $path,
+            'title'         => $request->input('product_name'),
+            'price'         => $request->input('product_price'),
+            'filename'      => $path,
+            'brand_name'    => $request->input('brand_name'),
+            'category_name' => $request->input('category_name')
         ];
 
-        DB::table('products')->where('id', $id)->update($updateData);
+        // echo '<pre>'; print_r($product->title); // 舊Name
+        $result = $product->update($updateData); // 
+        // echo '<pre>'; print_r($product->title);  // 新Name
+        // DB::table('products')->where('id', $id)->update($updateData);
 
 
         return redirect()->route('products.index', ['product' => $id]);
@@ -151,7 +170,7 @@ class ProductController extends Controller
 
     public function destroy($id)
     {
-        $product = $this->getProducts($id);
+        $product = Product::find($id);
         if(!$product)
         {
             return redirect()->route('products.index');
@@ -166,7 +185,7 @@ class ProductController extends Controller
             $disk->delete($product->filename);
         }
 
-        DB::table('products')->where('id',$id)->delete();
+        $product->delete();
         
         return redirect()->route('products.index');
     }
