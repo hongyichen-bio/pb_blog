@@ -6,16 +6,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use App\Models\Product;
+use App\Models\Category;
 class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        // $products = $this->getProducts();
 
-        $category_name = $request->input('category_name');
+        $category_id = $request->input('category_id');
 
-        if(!empty($category_name)){
-            $products = Product::where('category_name', $category_name)->get();
+        if(!empty($category_id)){
+            $category = Category::find($category_id);
+            $products = $category->products;
         }else{
             $products = Product::all();
         }
