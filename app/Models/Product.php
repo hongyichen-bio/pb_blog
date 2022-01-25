@@ -13,6 +13,10 @@ class Product extends Model
 
     function category()
     {
-        return DB::table('categories')->where('id', $this->category_id)->first();
+        return $this->belongsTo(Category::class, 'category_id', 'aid');
+    }
+    function category_name()
+    {
+        return @$this->category->name ?: 'Default';
     }
 }

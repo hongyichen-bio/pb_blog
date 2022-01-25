@@ -15,7 +15,7 @@
         </a>
     </div>
     <div>{{$product->brand_name}}</div>
-    <div>{{$product->category()->name}}</div>
+    <div>{{@$product->category->name}}</div>
     <div>
         <a href="{{ route('products.edit', ['product' => $product->id ]) }}">Edit</a>
         <form method="post" action="{{ route('products.destroy', ['product' => $product->id]) }}">
