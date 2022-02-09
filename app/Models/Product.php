@@ -19,4 +19,8 @@ class Product extends Model
     {
         return @$this->category->name ?: 'Default';
     }
+    function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
 }
