@@ -5,22 +5,29 @@
     @csrf
     <div>
         <label>
-            Product name: <input type="text" name="product_name" value="{{ old('product_name') }}"/>
+            Product name: <input type="text" name="name" value="{{ old('product_name') }}"/>
         </label>
     </div>
     <br />
     <div>
         <label>
-            Product price: <input type="number" min=0 name="product_price" value="{{ old('product_price') }}"/>
+            Product price: <input type="number" min=0 name="price" value="{{ old('product_price') }}"/>
         </label>
     </div>
     <br />
     <div class="image_uploader">
         <label>
-            Product image: <input type="file" id="product_image" name="product_image" />
-        </label>
-        <div style="max-width: 300px;">
-            <img style="width: 100%;" id="" src="https://www.lifewire.com/thmb/P856-0hi4lmA2xinYWyaEpRIckw=/1920x1326/filters:no_upscale():max_bytes(150000):strip_icc()/cloud-upload-a30f385a928e44e199a62210d578375a.jpg" alt="">
+            Product image: 
+                <input 
+                    type="file" 
+                    name="image" 
+                />
+        </label><br/>
+        <div>
+            <img 
+                style="max-width: 400px"
+                src="https://via.placeholder.com/400x300" 
+            />
         </div>
     </div>
     <br />
@@ -42,6 +49,6 @@
 @section('inline_js')
     @parent
     <script>
-        imageUploader('image_uploader');
+        imageUploader('image_uploader')
     </script>
 @endsection

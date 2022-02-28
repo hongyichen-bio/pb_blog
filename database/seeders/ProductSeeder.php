@@ -16,14 +16,15 @@ class ProductSeeder extends Seeder
     public function run()
     {
         DB::table('products')->insert([
-            'title' => 'Apple',
-            'price' => 99999,
-            'filename' => 'products/apple01.jpg',
+            'name' => "Orange",
+            'price' => 30,
+            'image_url' => "http://localhost:8000/storage/products/orange01.jpg"
         ]);
+
         DB::table('products')->insert([
-            'title' => 'orange',
-            'price' => 45166,
-            'filename' => 'products/orange01.jpg',
+            'name' => "Apple",
+            'price' => 20,
+            'image_url' => "http://localhost:8000/storage/products/apple01.jpg"
         ]);
     }
 }

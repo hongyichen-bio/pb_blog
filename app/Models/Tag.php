@@ -9,8 +9,8 @@ class Tag extends Model
 {
     use HasFactory;
 
-    function products() 
+    public function products()
     {
-        return $this->belongsToMany(Product::class);
+        return $this->belongsToMany(Product::class, 'product_tag');
     }
 }

@@ -6,32 +6,41 @@
     @method('PATCH')
     <div>
         <label>
-            Product name: <input type="text" name="product_name" value="{{ $product->title }}"/>
+            Product name: <input type="text" name="name" value="{{ old('name') ?? $product->name }}"/>
         </label>
     </div>
     <br />
     <div>
         <label>
-            Product price: <input type="number" min=0 name="product_price" value="{{ $product->price }}"/>
+            Product price: <input type="number" min=0 name="price" value="{{ old('price') ?? $product->price }}"/>
         </label>
     </div>
+    <br />
     <div>
         <label>
-            Product brand Name: <input type="text" min=0 name="brand_name" value="{{ $product->brand_name }}"/>
+            Product brand name: <input type="text" name="brand_name" value="{{ old('brand_name') ?? $product->brand_name }}"/>
         </label>
     </div>
+    <br />
     <div>
         <label>
-            Product category Name: <input type="text" min=0 name="category_name" value="{{ $product->category_name }}"/>
+            Product category name: <input type="text" name="category_name" value="{{ old('category_name') ?? $product->category_name }}"/>
         </label>
     </div>
     <br />
     <div class="image_uploader">
         <label>
-            Product image: <input type="file" id="product_image" name="product_image" />
-        </label>
-        <div style="max-width: 300px;">
-            <img style="width: 100%;" id="" src="<?php echo asset('')."Storage/{$product->filename}" ?>" alt="">
+            Product image: 
+                <input 
+                    type="file" 
+                    name="image" 
+                />
+        </label><br/>
+        <div>
+            <img 
+                style="max-width: 400px"
+                src="{{ asset('storage/'.$product->image_url) }}" 
+            />
         </div>
     </div>
     <br />
@@ -53,6 +62,6 @@
 @section('inline_js')
     @parent
     <script>
-        imageUploader('image_uploader', '<?php echo asset('')."/Storage/{$product->filename}" ?>');
+        imageUploader('image_uploader')
     </script>
 @endsection

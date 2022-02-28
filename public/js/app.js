@@ -110,9 +110,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _imageUploader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./imageUploader */ "./resources/js/imageUploader.js");
 
 
-window.imageUploader = _imageUploader__WEBPACK_IMPORTED_MODULE_1__["default"];
 window.initAddToCart = _cart__WEBPACK_IMPORTED_MODULE_0__["initAddToCart"];
 window.initCartDeleteButton = _cart__WEBPACK_IMPORTED_MODULE_0__["initCartDeleteButton"];
+window.imageUploader = _imageUploader__WEBPACK_IMPORTED_MODULE_1__["default"];
 
 /***/ }),
 
@@ -223,7 +223,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-var imageUploader = function imageUploader(className, filenameUrl) {
+var imageUploader = function imageUploader(className) {
   var containers = document.querySelectorAll(".".concat(className));
 
   var _iterator = _createForOfIteratorHelper(containers),
@@ -233,10 +233,25 @@ var imageUploader = function imageUploader(className, filenameUrl) {
     var _loop = function _loop() {
       var container = _step.value;
       var input = container.querySelector('input[type=file]');
-      var img = document.querySelector('img');
       input.addEventListener('change', function (e) {
-        readURL(e.target, img);
+        readURL(e.target);
       });
+      var img = document.querySelector('img');
+      var oldSrc = img.getAttribute('src');
+
+      function readURL(input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+
+          reader.onload = function (e) {
+            img.setAttribute('src', e.target.result);
+          };
+
+          reader.readAsDataURL(input.files[0]);
+        } else {
+          img.setAttribute('src', oldSrc);
+        }
+      }
     };
 
     for (_iterator.s(); !(_step = _iterator.n()).done;) {
@@ -249,20 +264,6 @@ var imageUploader = function imageUploader(className, filenameUrl) {
   }
 };
 
-function readURL(input, img) {
-  if (input.files && input.files[0]) {
-    var reader = new FileReader();
-
-    reader.onload = function (e) {
-      img.setAttribute('src', e.target.result);
-    };
-
-    reader.readAsDataURL(input.files[0]);
-  } else {
-    img.setAttribute('src', 'https://www.lifewire.com/thmb/P856-0hi4lmA2xinYWyaEpRIckw=/1920x1326/filters:no_upscale():max_bytes(150000):strip_icc()/cloud-upload-a30f385a928e44e199a62210d578375a.jpg');
-  }
-}
-
 /* harmony default export */ __webpack_exports__["default"] = (imageUploader);
 
 /***/ }),
@@ -274,8 +275,8 @@ function readURL(input, img) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\milk3\Desktop\laravel\pb\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\milk3\Desktop\laravel\pb\resources\css\app.scss */"./resources/css/app.scss");
+__webpack_require__(/*! C:\Users\cty22\Desktop\Coureses\Laravel\projects\05. modal\pb_model\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\cty22\Desktop\Coureses\Laravel\projects\05. modal\pb_model\resources\css\app.scss */"./resources/css/app.scss");
 
 
 /***/ })
