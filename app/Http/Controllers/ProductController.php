@@ -16,7 +16,8 @@ class ProductController extends Controller
         $c_id = $request->input('c_id');
         if (!empty($c_id)){
             $category = Category::find($c_id);
-            $products = $category->products;
+            // $products = $category->products;
+            $products = $category->allRelatedProducts();
         } else {
             $products = Product::all();
         }
