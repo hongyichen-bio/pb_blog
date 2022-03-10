@@ -570,6 +570,7 @@ class ComposerStaticInit7142a394bc60ff847aca806e5753b1e0
         'App\\Models\\Product' => __DIR__ . '/../..' . '/app/Models/Product.php',
         'App\\Models\\ProductTag' => __DIR__ . '/../..' . '/app/Models/ProductTag.php',
         'App\\Models\\Scaffold' => __DIR__ . '/../..' . '/app/Models/Scaffold.php',
+        'App\\Models\\Subcategory' => __DIR__ . '/../..' . '/app/Models/Subcategory.php',
         'App\\Models\\Tag' => __DIR__ . '/../..' . '/app/Models/Tag.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
